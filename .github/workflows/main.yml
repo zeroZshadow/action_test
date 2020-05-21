@@ -16,7 +16,7 @@ jobs:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
       - run: >-
           echo
-          '{
+          \'{
             "commit": "$GITHUB_SHA",
             "branch": "$GITHUB_REF",
             "message": "Testing all the things :rocket:",
@@ -24,5 +24,5 @@ jobs:
               "name": "Test Name",
               "email": "some@email.com"
             }
-          }'
+          }\'
         if: steps.checkbuild.outputs.triggered == 'true'
