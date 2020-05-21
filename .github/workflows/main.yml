@@ -3,7 +3,7 @@ on:
   issue_comment:
     types: [created]
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: khan/pull-request-comment-trigger@bb03972cc9f423111f3b5a23fcc9fd32741acabb
@@ -14,5 +14,15 @@ jobs:
           reaction: rocket
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-      - run: 'echo Building!'
+      - run: >-
+          echo
+          '{
+            "commit": "$GITHUB_SHA",
+            "branch": "$GITHUB_REF",
+            "message": "Testing all the things :rocket:",
+            "author": {
+              "name": "Test Name",
+              "email": "some@email.com"
+            }
+          }'
         if: steps.checkbuild.outputs.triggered == 'true'
