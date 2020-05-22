@@ -16,6 +16,6 @@ jobs:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
       - run: echo "$COMMIT $BRANCH"
         env:
-          COMMIT: github.sha
-          BRANCH: github.ref
+          COMMIT: ${{ github.sha }}
+          BRANCH: ${{ github.ref }}
         if: steps.checkbuild.outputs.triggered == 'true'
