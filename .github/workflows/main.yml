@@ -41,7 +41,7 @@ jobs:
           \"commit\": \"$COMMIT\",
           \"pull_request_base_branch\": \"$PR_BRANCH\",
           \"pull_request_id\": \"$PR_ID\",
-          \"pull_request_repository\": \"$PR_URL\",
+          \"pull_request_repository\": \"$PR_URL\"
           }"
           -H "Authorization: Bearer $AUTH_TOKEN"
         env:
@@ -50,5 +50,5 @@ jobs:
           PR_BRANCH: ${{ steps.pr_data.outputs.pull_request_base_branch }}
           PR_ID: ${{ steps.pr_data.outputs.pull_request_id }}
           PR_URL: ${{ steps.pr_data.outputs.pull_request_repository }}
-          AUTH_TOKEN: "SomeLongAuthTokenYoullNeverKnow"
+          AUTH_TOKEN: ${{ secrets.buildkite_auth }}
         if: steps.check.outputs.triggered == 'true'
