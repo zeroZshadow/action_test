@@ -6,15 +6,32 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: khan/pull-request-comment-trigger@bb03972cc9f423111f3b5a23fcc9fd32741acabb
-        id: checkbuild
+      - name: Check comment
+        uses: khan/pull-request-comment-trigger@bb03972cc9f423111f3b5a23fcc9fd32741acabb
+        id: check
         with:
           trigger: '/build'
           prefix_only: true
           reaction: rocket
         env:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-      - run: echo "$HEAD"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: GitHub API Request
+        id: request
+        if: steps.check.outputs.triggered == 'true'
+        uses: octokit/request-action@v2.0.0
+        with:
+          route: ${{ github.event.issue.pull_request.url }}
         env:
-          HEAD: ${{ github.head_ref }}
-        if: steps.checkbuild.outputs.triggered == 'true'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get PR informations
+        if: steps.check.outputs.triggered == 'true'
+        id: pr_data
+        run: |
+          echo "::set-output name=branch::${{ fromJson(steps.request.outputs.data).head.ref }}"
+          echo "::set-output name=repo_name::${{ fromJson(steps.request.outputs.data).base.repo.full_name }}"
+      - name: Request Build
+        run: |
+          echo "$BRANCH"
+        env:
+          BRANCH: ${{ steps.pr_data.outputs.branch }}
+        if: steps.check.outputs.triggered == 'true'
