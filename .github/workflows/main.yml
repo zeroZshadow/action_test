@@ -14,15 +14,5 @@ jobs:
           reaction: rocket
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-      - run: >-
-          echo
-          \'{
-            "commit": "$GITHUB_SHA",
-            "branch": "$GITHUB_REF",
-            "message": "Testing all the things :rocket:",
-            "author": {
-              "name": "Test Name",
-              "email": "some@email.com"
-            }
-          }\'
+      - run: echo "$GITHUB_SHA $GITHUB_REF"
         if: steps.checkbuild.outputs.triggered == 'true'
