@@ -14,8 +14,7 @@ jobs:
           reaction: rocket
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-      - run: echo "$COMMIT $BRANCH"
+      - run: echo "$HEAD"
         env:
-          COMMIT: ${{ github.sha }}
-          BRANCH: ${{ github.ref }}
+          HEAD: ${{ github.head_ref }}
         if: steps.checkbuild.outputs.triggered == 'true'
