@@ -35,7 +35,11 @@ jobs:
           echo "::set-output name=pull_request_repository::${{ fromJson(steps.request.outputs.data).base.repo.git_url }}"
       - name: Request Build
         run: >-
-          curl -X POST "https://ptsv2.com/t/gxhwt-1590174925/post" -d "{ \"branch\": \"$BRANCH\" }"
+          curl -X POST "https://ptsv2.com/t/gxhwt-1590174925/post" -d
+          "{
+          \"branch\": \"$BRANCH\",
+          \"commit\": \"$COMMIT\"
+          }"
         env:
           BRANCH: ${{ steps.pr_data.outputs.branch }}
           COMMIT: ${{ steps.pr_data.outputs.committ }}
