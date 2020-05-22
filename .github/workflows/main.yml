@@ -38,11 +38,14 @@ jobs:
           curl -X POST "https://ptsv2.com/t/gxhwt-1590174925/post" -d
           "{
           \"branch\": \"$BRANCH\",
-          \"commit\": \"$COMMIT\"
+          \"commit\": \"$COMMIT\",
+          \"pull_request_base_branch\": \"$PR_BRANCH\",
+          \"pull_request_id\": \"$PR_ID\",
+          \"pull_request_repository\": \"$PR_URL\",
           }"
         env:
           BRANCH: ${{ steps.pr_data.outputs.branch }}
-          COMMIT: ${{ steps.pr_data.outputs.committ }}
+          COMMIT: ${{ steps.pr_data.outputs.commit }}
           PR_BRANCH: ${{ steps.pr_data.outputs.pull_request_base_branch }}
           PR_ID: ${{ steps.pr_data.outputs.pull_request_id }}
           PR_URL: ${{ steps.pr_data.outputs.pull_request_repository }}
