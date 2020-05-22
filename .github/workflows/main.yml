@@ -29,10 +29,18 @@ jobs:
         run: |
           echo "${{ steps.request.outputs.data }}"
           echo "::set-output name=branch::${{ fromJson(steps.request.outputs.data).head.ref }}"
-          echo "::set-output name=repo_name::${{ fromJson(steps.request.outputs.data).base.repo.full_name }}"
+          echo "::set-output name=commit::${{ fromJson(steps.request.outputs.data).head.sha }}"
+          echo "::set-output name=pull_request_base_branch::${{ fromJson(steps.request.outputs.data).base.ref }}"
+          echo "::set-output name=pull_request_id::${{ fromJson(steps.request.outputs.data).number }}"
+          echo "::set-output name=pull_request_repository::${{ fromJson(steps.request.outputs.data).base.repo.git_url }}"
       - name: Request Build
-        run: |
-          echo "$BRANCH"
+        uses: wei/curl@v1.1.1
+        with:
+          args: -X POST https://ptsv2.com/t/gxhwt-1590174925 -d { branch=$BRANCH }
         env:
           BRANCH: ${{ steps.pr_data.outputs.branch }}
+          COMMIT: ${{ steps.pr_data.outputs.committ }}
+          PR_BRANCH: ${{ steps.pr_data.outputs.pull_request_base_branch }}
+          PR_ID: ${{ steps.pr_data.outputs.pull_request_id }}
+          PR_URL: ${{ steps.pr_data.outputs.pull_request_repository }}
         if: steps.check.outputs.triggered == 'true'
