@@ -6,15 +6,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Check comment
-        uses: khan/pull-request-comment-trigger@bb03972cc9f423111f3b5a23fcc9fd32741acabb
-        id: check
+      - name: Check comment for /build
+        id: command
+        uses: xt0rted/slash-command-action@v1
         with:
-          trigger: '/build'
-          prefix_only: true
-          reaction: rocket
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          command: build
+          reaction-type: "rocket"
       - name: GitHub API Request
         id: request
         if: steps.check.outputs.triggered == 'true'
@@ -24,7 +22,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Get PR informations
-        if: steps.check.outputs.triggered == 'true'
         id: pr_data
         run: |
           echo "${{ steps.request.outputs.data }}"
@@ -51,4 +48,3 @@ jobs:
           PR_ID: ${{ steps.pr_data.outputs.pull_request_id }}
           PR_URL: ${{ steps.pr_data.outputs.pull_request_repository }}
           AUTH_TOKEN: ${{ secrets.buildkite_auth }}
-        if: steps.check.outputs.triggered == 'true'
